@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Features | AI Mock Interview</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+
+            background:
+            linear-gradient(
+                135deg,
+                #020617,
+                #0f172a,
+                #1e3a8a
+            );
+
+            color:white;
+
+            overflow-x:hidden;
+        }
+
+        /* NAVBAR */
+
+        .navbar{
+
+            width:100%;
+
+            padding:25px 80px;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            background:rgba(2,6,23,0.85);
+
+            backdrop-filter:blur(12px);
+
+            position:fixed;
+
+            top:0;
+
+            z-index:1000;
+        }
+
+        .logo{
+
+            font-size:34px;
+
+            font-weight:bold;
+
+            color:#38bdf8;
+        }
+
+        .nav-links a{
+
+            text-decoration:none;
+
+            color:white;
+
+            margin-left:35px;
+
+            font-size:18px;
+
+            transition:0.3s;
+        }
+
+        .nav-links a:hover{
+
+            color:#38bdf8;
+        }
+
+        /* HERO SECTION */
+
+        .hero{
+
+            min-height:100vh;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            text-align:center;
+
+            padding:140px 60px 80px;
+        }
+
+        .hero-content{
+
+            max-width:1100px;
+        }
+
+        .hero-content h1{
+
+            font-size:85px;
+
+            line-height:1.2;
+
+            margin-bottom:30px;
+        }
+
+        .hero-content span{
+
+            color:#38bdf8;
+        }
+
+        .hero-content p{
+
+            font-size:24px;
+
+            line-height:2;
+
+            color:#cbd5e1;
+
+            margin-bottom:50px;
+        }
+
+        .hero-btn{
+
+            padding:18px 40px;
+
+            border:none;
+
+            border-radius:14px;
+
+            background:#38bdf8;
+
+            color:black;
+
+            font-size:18px;
+
+            font-weight:bold;
+
+            cursor:pointer;
+
+            transition:0.3s;
+        }
+
+        .hero-btn:hover{
+
+            transform:scale(1.05);
+        }
+
+        /* FEATURES SECTION */
+
+        .features{
+
+            width:100%;
+
+            padding:80px;
+        }
+
+        .section-title{
+
+            text-align:center;
+
+            font-size:65px;
+
+            margin-bottom:25px;
+
+            color:#38bdf8;
+        }
+
+        .section-subtitle{
+
+            text-align:center;
+
+            font-size:22px;
+
+            line-height:2;
+
+            color:#cbd5e1;
+
+            max-width:1000px;
+
+            margin:auto;
+
+            margin-bottom:80px;
+        }
+
+        .feature-grid{
+
+            display:grid;
+
+            grid-template-columns:
+            repeat(auto-fit,minmax(320px,1fr));
+
+            gap:40px;
+        }
+
+        .feature-card{
+
+            background:
+            rgba(255,255,255,0.08);
+
+            border:
+            1px solid rgba(255,255,255,0.1);
+
+            border-radius:30px;
+
+            padding:45px;
+
+            backdrop-filter:blur(15px);
+
+            transition:0.4s;
+
+            position:relative;
+
+            overflow:hidden;
+        }
+
+        .feature-card:hover{
+
+            transform:
+            translateY(-12px);
+
+            box-shadow:
+            0 0 30px
+            rgba(56,189,248,0.5);
+        }
+
+        .feature-number{
+
+            font-size:70px;
+
+            font-weight:bold;
+
+            color:
+            rgba(56,189,248,0.2);
+
+            position:absolute;
+
+            top:20px;
+
+            right:30px;
+        }
+
+        .feature-card h2{
+
+            font-size:35px;
+
+            margin-bottom:25px;
+
+            color:#38bdf8;
+        }
+
+        .feature-card p{
+
+            font-size:19px;
+
+            line-height:2;
+
+            color:#e2e8f0;
+        }
+
+        /* EXTRA SECTION */
+
+        .extra-section{
+
+            padding:100px 80px;
+        }
+
+        .extra-container{
+
+            display:flex;
+
+            gap:50px;
+
+            flex-wrap:wrap;
+        }
+
+        .extra-box{
+
+            flex:1;
+
+            min-width:320px;
+
+            background:
+            rgba(255,255,255,0.08);
+
+            padding:50px;
+
+            border-radius:30px;
+
+            backdrop-filter:blur(12px);
+
+            border:
+            1px solid rgba(255,255,255,0.1);
+
+            transition:0.4s;
+        }
+
+        .extra-box:hover{
+
+            transform:translateY(-10px);
+
+            box-shadow:
+            0 0 30px
+            rgba(56,189,248,0.4);
+        }
+
+        .extra-box h2{
+
+            font-size:38px;
+
+            margin-bottom:30px;
+
+            color:#38bdf8;
+        }
+
+        .extra-box ul{
+
+            padding-left:20px;
+        }
+
+        .extra-box ul li{
+
+            margin-bottom:20px;
+
+            font-size:20px;
+
+            line-height:1.8;
+
+            color:#e2e8f0;
+        }
+
+        /* FOOTER */
+
+        .footer{
+
+            text-align:center;
+
+            padding:35px;
+
+            background:#020617;
+
+            color:#94a3b8;
+
+            margin-top:80px;
+
+            font-size:17px;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:900px){
+
+            .hero-content h1{
+
+                font-size:55px;
+            }
+
+            .hero-content p{
+
+                font-size:20px;
+            }
+
+            .navbar{
+
+                padding:20px;
+            }
+
+            .nav-links a{
+
+                margin-left:18px;
+
+                font-size:15px;
+            }
+
+            .features,
+            .extra-section{
+
+                padding:40px 20px;
+            }
+
+            .section-title{
+
+                font-size:45px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <div class="navbar">
+
+        <div class="logo">
+
+            AI Interview
+
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/">Home</a>
+
+            <a href="/features/">Features</a>
+
+            <a href="/about/">About</a>
+
+            <a href="/contact/">Contact</a>
+
+        </div>
+
+    </div>
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Powerful
+                <span>AI Features</span>
+                For Smart Interview Preparation
+
+            </h1>
+
+            <p>
+
+                Experience a next-generation AI interview platform
+                designed to improve communication,
+                confidence,
+                technical skills,
+                aptitude solving,
+                and professional performance.
+
+            </p>
+
+            <a href="/login">
+
+                <button class="hero-btn">
+
+                    Start Your Interview
+
+                </button>
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- FEATURES -->
+
+    <section class="features">
+
+        <h1 class="section-title">
+
+            Core Features
+
+        </h1>
+
+        <p class="section-subtitle">
+
+            Our intelligent system combines Artificial Intelligence,
+            real-time analysis,
+            speech recognition,
+            and modern web technologies
+            to create a complete interview preparation experience.
+
+        </p>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+
+                    01
+
+                </div>
+
+                <h2>
+
+                    HR Interview Analysis
+
+                </h2>
+
+                <p>
+
+                    Practice professional HR interview questions
+                    and receive intelligent AI feedback
+                    for communication,
+                    confidence,
+                    grammar,
+                    personality,
+                    and answer quality.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+
+                    02
+
+                </div>
+
+                <h2>
+
+                    Technical Interview
+
+                </h2>
+
+                <p>
+
+                    Improve coding,
+                    programming,
+                    problem-solving,
+                    and technical communication skills
+                    with smart technical interview simulations.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+
+                    03
+
+                </div>
+
+                <h2>
+
+                    Aptitude Practice
+
+                </h2>
+
+                <p>
+
+                    Strengthen logical reasoning,
+                    analytical thinking,
+                    quantitative aptitude,
+                    and placement preparation
+                    through interactive aptitude rounds.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+
+                    04
+
+                </div>
+
+                <h2>
+
+                    AI Feedback System
+
+                </h2>
+
+                <p>
+
+                    Get instant AI-generated evaluation reports
+                    with detailed feedback,
+                    answer improvement suggestions,
+                    professional corrections,
+                    and performance analysis.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+
+                    05
+
+                </div>
+
+                <h2>
+
+                    Voice Recognition
+
+                </h2>
+
+                <p>
+
+                    Answer interview questions using voice input
+                    through integrated speech recognition technology
+                    for realistic interview practice experience.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+
+                    06
+
+                </div>
+
+                <h2>
+
+                    Modern User Interface
+
+                </h2>
+
+                <p>
+
+                    Experience a beautiful,
+                    responsive,
+                    and professional web application
+                    designed with modern UI/UX principles
+                    for smooth interaction.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- EXTRA SECTION -->
+
+    <section class="extra-section">
+
+        <div class="extra-container">
+
+            <div class="extra-box">
+
+                <h2>
+
+                    Why Choose Our Platform?
+
+                </h2>
+
+                <ul>
+
+                    <li>✔ AI-Powered Interview Simulation</li>
+
+                    <li>✔ Real-Time Performance Analysis</li>
+
+                    <li>✔ Smart Communication Evaluation</li>
+
+                    <li>✔ Technical & Aptitude Preparation</li>
+
+                    <li>✔ Professional Placement Training</li>
+
+                    <li>✔ Interactive Voice Support</li>
+
+                </ul>
+
+            </div>
+
+            <div class="extra-box">
+
+                <h2>
+
+                    Technologies Used
+
+                </h2>
+
+                <ul>
+
+                    <li>✔ Python & Django Framework</li>
+
+                    <li>✔ HTML5, CSS3 & JavaScript</li>
+
+                    <li>✔ Artificial Intelligence Integration</li>
+
+                    <li>✔ Speech Recognition API</li>
+
+                    <li>✔ Responsive Modern UI Design</li>
+
+                    <li>✔ AI Performance Feedback Engine</li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        © 2026 AI Mock Interview Platform |
+        Designed & Developed by Rahul Edward R
+
+    </div>
+
+</body>
+
+</html>

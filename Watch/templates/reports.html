@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Interview Reports</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            display:flex;
+            background:linear-gradient(135deg,#020617,#0f172a,#1e3a8a);
+            color:white;
+            min-height:100vh;
+            overflow-x:hidden;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar{
+            width:270px;
+            background:rgba(17,24,39,0.95);
+            padding:35px 25px;
+            backdrop-filter:blur(10px);
+            border-right:1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar h2{
+            color:#38bdf8;
+            margin-bottom:50px;
+            text-align:center;
+            font-size:32px;
+        }
+
+        .sidebar ul{
+            list-style:none;
+        }
+
+        .sidebar ul li{
+            margin:28px 0;
+        }
+
+        .sidebar ul li a{
+            text-decoration:none;
+            color:white;
+            font-size:18px;
+            transition:0.3s;
+            padding:14px 18px;
+            display:block;
+            border-radius:14px;
+        }
+
+        .sidebar ul li a:hover{
+            background:#38bdf8;
+            color:black;
+            transform:translateX(6px);
+        }
+
+        /* MAIN SECTION */
+
+        .main{
+            flex:1;
+            padding:45px;
+        }
+
+        .top-section{
+            margin-bottom:45px;
+        }
+
+        .top-section h1{
+            font-size:45px;
+            line-height:1.5;
+            margin-bottom:15px;
+        }
+
+        .top-section span{
+            color:#38bdf8;
+        }
+
+        .welcome-text{
+            color:#cbd5e1;
+            font-size:18px;
+            line-height:1.8;
+        }
+
+        /* REPORTS TABLE */
+
+        .reports-container{
+            background:rgba(255,255,255,0.08);
+            border-radius:20px;
+            backdrop-filter:blur(12px);
+            border:1px solid rgba(255,255,255,0.1);
+            overflow:hidden;
+        }
+
+        .reports-table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        .reports-table thead{
+            background:rgba(56,189,248,0.15);
+            border-bottom:2px solid rgba(255,255,255,0.1);
+        }
+
+        .reports-table th{
+            padding:20px;
+            text-align:left;
+            color:#38bdf8;
+            font-weight:bold;
+            font-size:16px;
+        }
+
+        .reports-table td{
+            padding:18px 20px;
+            border-bottom:1px solid rgba(255,255,255,0.05);
+            color:#cbd5e1;
+        }
+
+        .reports-table tbody tr:hover{
+            background:rgba(56,189,248,0.08);
+            transition:0.3s;
+        }
+
+        .badge{
+            display:inline-block;
+            padding:6px 14px;
+            border-radius:12px;
+            font-size:13px;
+            font-weight:bold;
+        }
+
+        .badge.high{
+            background:rgba(34,197,94,0.2);
+            color:#22c55e;
+        }
+
+        .badge.medium{
+            background:rgba(244,158,11,0.2);
+            color:#f59e0b;
+        }
+
+        .badge.low{
+            background:rgba(239,68,68,0.2);
+            color:#ef4444;
+        }
+
+        .score{
+            font-weight:bold;
+            color:#38bdf8;
+            font-size:18px;
+        }
+
+        .back-link{
+            display:inline-block;
+            margin-bottom:30px;
+            padding:12px 25px;
+            background:#38bdf8;
+            color:black;
+            text-decoration:none;
+            border-radius:12px;
+            font-weight:bold;
+            transition:0.3s;
+        }
+
+        .back-link:hover{
+            transform:scale(1.05);
+        }
+
+        .filter-section{
+            margin-bottom:30px;
+            display:flex;
+            gap:15px;
+            flex-wrap:wrap;
+        }
+
+        .filter-btn{
+            padding:10px 20px;
+            background:rgba(255,255,255,0.1);
+            border:1px solid rgba(255,255,255,0.2);
+            color:white;
+            border-radius:12px;
+            cursor:pointer;
+            transition:0.3s;
+            font-size:14px;
+        }
+
+        .filter-btn:hover, .filter-btn.active{
+            background:#38bdf8;
+            color:black;
+        }
+
+        @media(max-width:1100px){
+            body{
+                flex-direction:column;
+            }
+
+            .sidebar{
+                width:100%;
+            }
+
+            .reports-table{
+                font-size:14px;
+            }
+
+            .reports-table th, .reports-table td{
+                padding:12px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>AI Interview</h2>
+
+        <ul>
+
+            <li>
+                <a href="/">🏠 Home</a>
+            </li>
+
+            <li>
+                <a href="/dashboard">📊 Dashboard</a>
+            </li>
+
+            <li>
+                <a href="/interview">🎤 Interviews</a>
+            </li>
+
+            <li>
+                <a href="/performance">📈 Performance</a>
+            </li>
+
+            <li>
+                <a href="/reports">📄 Reports</a>
+            </li>
+
+            <li>
+                <a href="/login">🚪 Logout</a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+
+    <div class="main">
+
+        <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+
+        <div class="top-section">
+
+            <h1>📄 Interview <span>Reports</span></h1>
+
+            <p class="welcome-text">
+
+                View detailed reports of all your practice interviews.
+                Track your scores, feedback, and improvement history for each interview session.
+
+            </p>
+
+        </div>
+
+        <!-- FILTER SECTION -->
+
+        <div class="filter-section">
+
+            <button class="filter-btn active" data-filter="all">All Interviews ({{ counts.all }})</button>
+            <button class="filter-btn" data-filter="hr">💼 HR ({{ counts.HR }})</button>
+            <button class="filter-btn" data-filter="technical">💻 Technical ({{ counts.Technical }})</button>
+            <button class="filter-btn" data-filter="aptitude">🧠 Aptitude ({{ counts.Aptitude }})</button>
+
+        </div>
+
+        <!-- REPORTS TABLE -->
+
+        <div class="reports-container">
+
+            <table class="reports-table">
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Interview Type</th>
+                        <th>Question</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for attempt in attempts %}
+                    <tr data-category="{{ attempt.category|lower }}">
+                        <td>{{ attempt.created_at|date:'Y-m-d H:i' }}</td>
+                        <td>{{ attempt.category }}</td>
+                        <td>{{ attempt.question.question|truncatechars:40 }}</td>
+                        <td class="score">{{ attempt.score|floatformat:1 }}/10</td>
+                        <td>
+                            {% if attempt.score >= 8 %}
+                                <span class="badge high">Good</span>
+                            {% elif attempt.score >= 6 %}
+                                <span class="badge medium">Fair</span>
+                            {% else %}
+                                <span class="badge low">Needs Work</span>
+                            {% endif %}
+                        </td>
+                        <td><a href="#" style="color:#38bdf8; text-decoration:none;">View Feedback →</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align:center; color:#cbd5e1; padding:30px;">
+                            No interview reports available yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    <tr class="no-results" style="display:none;">
+                        <td colspan="6" style="text-align:center; color:#cbd5e1; padding:30px;">
+                            No interviews match this category yet.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <script>
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const reportRows = document.querySelectorAll('.reports-table tbody tr[data-category]');
+        const noResultsRow = document.querySelector('.reports-table tbody tr.no-results');
+
+        function updateFilter(activeButton, filter) {
+            filterButtons.forEach(button => {
+                button.classList.toggle('active', button === activeButton);
+            });
+
+            let visibleCount = 0;
+            reportRows.forEach(row => {
+                const category = row.dataset.category;
+                const show = filter === 'all' || category === filter;
+                row.style.display = show ? '' : 'none';
+                if (show) {
+                    visibleCount += 1;
+                }
+            });
+
+            if (noResultsRow) {
+                noResultsRow.style.display = visibleCount === 0 ? '' : 'none';
+            }
+        }
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const filter = this.dataset.filter;
+                updateFilter(this, filter);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

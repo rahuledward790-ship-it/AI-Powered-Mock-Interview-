@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Mock Interview</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+
+            background:
+            linear-gradient(
+                135deg,
+                #020617,
+                #0f172a,
+                #1e3a8a
+            );
+
+            min-height:100vh;
+
+            color:white;
+
+            overflow-x:hidden;
+        }
+
+        /* NAVBAR */
+
+        .navbar{
+
+            width:100%;
+
+            padding:22px 70px;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            background:rgba(2,6,23,0.85);
+
+            backdrop-filter:blur(12px);
+        }
+
+        .logo{
+
+            font-size:32px;
+
+            font-weight:bold;
+
+            color:#38bdf8;
+        }
+
+        .nav-links a{
+
+            text-decoration:none;
+
+            color:white;
+
+            margin-left:35px;
+
+            font-size:18px;
+
+            transition:0.3s;
+        }
+
+        .nav-links a:hover{
+
+            color:#38bdf8;
+        }
+
+        /* HERO */
+
+        .hero{
+
+            min-height:90vh;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            padding:80px;
+        }
+
+        .hero-text{
+
+            width:55%;
+        }
+
+        .hero-text h1{
+
+            font-size:72px;
+
+            line-height:1.2;
+
+            margin-bottom:25px;
+        }
+
+        .hero-text span{
+
+            color:#38bdf8;
+        }
+
+        .hero-text p{
+
+            font-size:22px;
+
+            line-height:1.9;
+
+            color:#cbd5e1;
+
+            margin-bottom:40px;
+        }
+
+        .buttons button{
+
+            padding:17px 38px;
+
+            border:none;
+
+            border-radius:12px;
+
+            font-size:18px;
+
+            cursor:pointer;
+
+            margin-right:18px;
+
+            transition:0.3s;
+        }
+
+        .start-btn{
+
+            background:#38bdf8;
+
+            color:black;
+
+            font-weight:bold;
+        }
+
+        .start-btn:hover{
+
+            transform:scale(1.05);
+        }
+
+        .learn-btn{
+
+            background:transparent;
+
+            border:2px solid white;
+
+            color:white;
+        }
+
+        .learn-btn:hover{
+
+            background:white;
+
+            color:black;
+        }
+
+        .hero-image{
+
+            width:40%;
+
+            display:flex;
+
+            justify-content:center;
+        }
+
+        .circle{
+
+            width:430px;
+
+            height:430px;
+
+            border-radius:50%;
+
+            background:
+            rgba(255,255,255,0.08);
+
+            backdrop-filter:blur(15px);
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            box-shadow:
+            0 0 40px rgba(0,0,0,0.5);
+        }
+
+        .circle h2{
+
+            text-align:center;
+
+            font-size:48px;
+
+            color:#38bdf8;
+
+            line-height:1.6;
+        }
+
+        /* FOOTER */
+
+        .footer{
+
+            text-align:center;
+
+            padding:30px;
+
+            background:#020617;
+
+            color:#94a3b8;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:900px){
+
+            .hero{
+
+                flex-direction:column;
+
+                text-align:center;
+
+                padding:50px 30px;
+            }
+
+            .hero-text{
+
+                width:100%;
+            }
+
+            .hero-image{
+
+                width:100%;
+
+                margin-top:50px;
+            }
+
+            .hero-text h1{
+
+                font-size:50px;
+            }
+
+            .circle{
+
+                width:300px;
+
+                height:300px;
+            }
+
+            .navbar{
+
+                padding:20px;
+            }
+
+            .nav-links a{
+
+                margin-left:15px;
+
+                font-size:16px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <div class="navbar">
+
+        <div class="logo">
+
+            AI Interview
+
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/">Home</a>
+
+            <a href="/features">Features</a>
+
+            <a href="/about">About</a>
+
+            <a href="/contact">Contact</a>
+
+        </div>
+
+    </div>
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+        <div class="hero-text">
+
+            <h1>
+
+                AI-Powered
+                <span>Mock Interview</span>
+                Platform
+
+            </h1>
+
+            <p>
+
+                Prepare for HR, Technical and Aptitude interviews
+                using Artificial Intelligence.
+
+                Improve communication skills,
+                confidence,
+                technical knowledge,
+                and placement readiness
+                through professional AI-powered interview practice.
+
+            </p>
+
+            <div class="buttons">
+
+                <a href="/login">
+
+                    <button class="start-btn">
+
+                        Start Interview
+
+                    </button>
+
+                </a>
+
+                <a href="/learnmore">
+
+                    <button class="learn-btn">
+
+                        Learn More
+
+                    </button>
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="hero-image">
+
+            <div class="circle">
+
+                <h2>
+
+                    AI
+                    <br>
+                    INTERVIEW
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        © 2026 AI Mock Interview System |
+        Designed & Developed by Rahul Edward R
+
+    </div>
+
+</body>
+
+</html>

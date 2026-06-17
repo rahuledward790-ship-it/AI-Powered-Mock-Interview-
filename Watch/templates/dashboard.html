@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Dashboard</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            display:flex;
+            background:linear-gradient(135deg,#020617,#0f172a,#1e3a8a);
+            color:white;
+            min-height:100vh;
+            overflow-x:hidden;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar{
+            width:270px;
+            background:rgba(17,24,39,0.95);
+            padding:35px 25px;
+            backdrop-filter:blur(10px);
+            border-right:1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar h2{
+            color:#38bdf8;
+            margin-bottom:50px;
+            text-align:center;
+            font-size:32px;
+        }
+
+        .sidebar ul{
+            list-style:none;
+        }
+
+        .sidebar ul li{
+            margin:28px 0;
+        }
+
+        .sidebar ul li a{
+            text-decoration:none;
+            color:white;
+            font-size:18px;
+            transition:0.3s;
+            padding:14px 18px;
+            display:block;
+            border-radius:14px;
+        }
+
+        .sidebar ul li a:hover{
+            background:#38bdf8;
+            color:black;
+            transform:translateX(6px);
+        }
+
+        /* MAIN SECTION */
+
+        .main{
+            flex:1;
+            padding:45px;
+        }
+
+        .top-section{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:45px;
+        }
+
+        .top-section h1{
+            font-size:45px;
+            line-height:1.5;
+        }
+
+        .top-section span{
+            color:#38bdf8;
+        }
+
+        .welcome-text{
+            color:#cbd5e1;
+            margin-top:10px;
+            font-size:18px;
+            line-height:1.8;
+        }
+
+        /* CARDS */
+
+        .cards{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:30px;
+        }
+
+        .cards a{
+            text-decoration:none;
+        }
+
+        .card{
+            background:rgba(255,255,255,0.08);
+            padding:35px;
+            border-radius:25px;
+            backdrop-filter:blur(12px);
+            border:1px solid rgba(255,255,255,0.1);
+            box-shadow:0 0 25px rgba(0,0,0,0.3);
+            transition:0.4s;
+            min-height:260px;
+        }
+
+        .card:hover{
+            transform:translateY(-10px) scale(1.02);
+            box-shadow:0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        .card h2{
+            color:#38bdf8;
+            margin-bottom:20px;
+            font-size:26px;
+        }
+
+        .card p{
+            color:#cbd5e1;
+            line-height:1.9;
+            font-size:16px;
+        }
+
+        /* BUTTON */
+
+        .button-section{
+            margin-top:55px;
+        }
+
+        .start-btn{
+            padding:18px 45px;
+            border:none;
+            border-radius:15px;
+            background:linear-gradient(90deg,#38bdf8,#8b5cf6);
+            color:white;
+            font-size:20px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.3s;
+            box-shadow:0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .start-btn:hover{
+            transform:scale(1.05);
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:1100px){
+
+            .cards{
+                grid-template-columns:1fr;
+            }
+
+            body{
+                flex-direction:column;
+            }
+
+            .sidebar{
+                width:100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>AI Interview</h2>
+
+        <ul>
+
+            <li>
+                <a href="/">🏠 Home</a>
+            </li>
+
+            <li>
+                <a href="/dashboard">📊 Dashboard</a>
+            </li>
+
+            <li>
+                <a href="/performance">📈 Performance</a>
+            </li>
+
+            <li>
+                <a href="/reports">📄 Reports</a>
+            </li>
+
+            <li>
+                <a href="/login">🚪 Logout</a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+
+    <div class="main">
+
+        <div class="top-section">
+
+            <div>
+
+                <h1>
+                    Welcome,
+                    <span>{{ request.user.first_name }}</span>
+                    🚀
+                </h1>
+
+                <p class="welcome-text">
+
+                    Improve your communication,
+                    technical knowledge,
+                    aptitude skills,
+                    and interview confidence
+                    using our AI-powered interview platform.
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- DASHBOARD CARDS -->
+
+        <div class="cards">
+
+            <!-- HR INTERVIEW -->
+
+            <a href="/interview/hr">
+
+                <div class="card">
+
+                    <h2>💼 HR Interview</h2>
+
+                    <p>
+
+                        Practice personal interview questions
+                        like self introduction,
+                        strengths & weaknesses,
+                        leadership,
+                        communication,
+                        confidence,
+                        and personality-based questions.
+
+                    </p>
+
+                </div>
+
+            </a>
+
+            <!-- TECHNICAL INTERVIEW -->
+
+            <a href="/interview/technical">
+
+                <div class="card">
+
+                    <h2>💻 Technical Interview</h2>
+
+                    <p>
+
+                        Attend Python,
+                        Java,
+                        DBMS,
+                        coding,
+                        OOP concepts,
+                        and technical interview rounds
+                        with AI-powered practice sessions.
+
+                    </p>
+
+                </div>
+
+            </a>
+
+            <!-- APTITUDE TEST -->
+
+            <a href="/interview/aptitude">
+
+                <div class="card">
+
+                    <h2>🧠 Aptitude Test</h2>
+
+                    <p>
+
+                        Solve logical reasoning,
+                        quantitative aptitude,
+                        number series,
+                        analytical thinking,
+                        and problem-solving questions
+                        to improve placement preparation.
+
+                    </p>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

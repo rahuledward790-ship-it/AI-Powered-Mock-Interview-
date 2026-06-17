@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Technical Interview</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:linear-gradient(
+                135deg,
+                #020617,
+                #0f172a,
+                #1e3a8a
+            );
+
+            min-height:100vh;
+
+            color:white;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            padding:40px;
+        }
+
+        .container{
+
+            width:100%;
+            max-width:1000px;
+
+            background:rgba(255,255,255,0.08);
+
+            border-radius:30px;
+
+            padding:40px;
+
+            backdrop-filter:blur(12px);
+
+            border:1px solid rgba(255,255,255,0.1);
+
+            box-shadow:0 0 30px rgba(0,0,0,0.4);
+        }
+
+        .title{
+
+            text-align:center;
+
+            margin-bottom:30px;
+        }
+
+        .title h1{
+
+            font-size:42px;
+
+            color:#38bdf8;
+        }
+
+        .title p{
+
+            margin-top:10px;
+
+            color:#cbd5e1;
+        }
+
+        .question-box{
+
+            background:#111827;
+
+            padding:30px;
+
+            border-radius:20px;
+
+            margin-bottom:25px;
+        }
+
+        .question-number{
+
+            color:#38bdf8;
+
+            margin-bottom:15px;
+
+            font-size:18px;
+        }
+
+        .question{
+
+            font-size:28px;
+
+            line-height:1.6;
+        }
+
+        textarea{
+
+            width:100%;
+
+            height:180px;
+
+            border:none;
+
+            outline:none;
+
+            border-radius:20px;
+
+            padding:20px;
+
+            font-size:18px;
+
+            margin-top:25px;
+
+            resize:none;
+
+            background:#f8fafc;
+        }
+
+        .button-section{
+
+            display:flex;
+
+            gap:20px;
+
+            margin-top:25px;
+
+            flex-wrap:wrap;
+        }
+
+        button{
+
+            padding:15px 30px;
+
+            border:none;
+
+            border-radius:15px;
+
+            font-size:17px;
+
+            font-weight:bold;
+
+            cursor:pointer;
+
+            transition:0.3s;
+        }
+
+        .analyze-btn{
+
+            background:linear-gradient(
+                90deg,
+                #38bdf8,
+                #8b5cf6
+            );
+
+            color:white;
+        }
+
+        .next-btn{
+
+            background:#22c55e;
+
+            color:white;
+        }
+
+        .previous-btn{
+
+            background:#f59e0b;
+
+            color:white;
+        }
+
+        .mic-btn{
+
+            background:#ef4444;
+
+            color:white;
+        }
+
+        button:hover{
+
+            transform:scale(1.05);
+        }
+
+        .feedback-box{
+
+            margin-top:35px;
+
+            background:#111827;
+
+            padding:30px;
+
+            border-radius:20px;
+
+            line-height:1.8;
+
+            text-transform:none;
+        }
+
+        .speech-status{
+
+            margin-top:20px;
+
+            color:#cbd5e1;
+
+            font-size:14px;
+
+            min-height:24px;
+
+        }
+
+        .mic-btn.listening{
+
+            box-shadow:0 0 0 6px rgba(56,189,248,0.18);
+
+        }
+
+        .feedback-title{
+
+            color:#38bdf8;
+
+            font-size:26px;
+
+            margin-bottom:20px;
+        }
+
+        .feedback-block{
+
+            margin-bottom:24px;
+
+            padding-bottom:10px;
+
+            border-bottom:1px solid rgba(255,255,255,0.08);
+        }
+
+        .feedback-heading{
+
+            font-weight:800;
+
+            font-size:18px;
+
+            text-transform:uppercase;
+
+            color:#ffffff;
+
+            margin-bottom:10px;
+        }
+
+        .feedback-content{
+
+            font-family: 'Times New Roman', Georgia, serif;
+
+            font-size:16px;
+
+            color:#e2e8f0;
+
+        }
+
+        .feedback-text{
+
+            color:#cbd5e1;
+
+            line-height:1.8;
+
+            white-space:pre-wrap;
+
+            text-transform:none;
+
+            font-family: inherit;
+        }
+
+        .empty{
+
+            text-align:center;
+
+            font-size:25px;
+
+            color:#f8fafc;
+        }
+
+        .completed{
+
+            text-align:center;
+
+            padding:40px;
+        }
+
+        .completed h1{
+
+            font-size:40px;
+
+            color:#22c55e;
+
+            margin-bottom:20px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="title">
+
+            <h1>AI Technical Mock Interview 🚀</h1>
+
+            <p>
+                Practice Technical interviews with
+                AI-powered analysis
+            </p>
+
+        </div>
+
+       {% if completed %}
+
+<div class="completed">
+
+    <h1>🎉 Technical Interview Completed</h1>
+
+    <p>
+        You completed all technical questions successfully.
+    </p>
+
+    <div class="button-section"
+         style="justify-content:center; margin-top:30px;">
+
+        <a href="/dashboard">
+
+            <button class="previous-btn">
+
+                🏠 Return to Dashboard
+
+            </button>
+
+        </a>
+
+        <a href="/interview/aptitude/0">
+
+            <button class="next-btn">
+
+                🧠 Continue With Aptitude Test
+
+            </button>
+
+        </a>
+
+    </div>
+
+</div>
+
+{% elif question %}
+
+        <div class="question-box">
+
+            <div class="question-number">
+
+                Question
+                {{ current_index }}
+                of
+                {{ total_questions }}
+
+            </div>
+
+            <div class="question">
+
+                {{ question.question }}
+
+            </div>
+
+        </div>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <textarea
+                name="answer"
+                id="answerBox"
+                placeholder="Type your answer here..."
+            >{{ answer }}</textarea>
+
+            <div class="button-section">
+
+                <button
+                    type="button"
+                    id="micButton"
+                    class="mic-btn"
+                    onclick="startListening()"
+                >
+                    🎤 Speak
+                </button>
+
+                <button
+                    type="submit"
+                    class="analyze-btn"
+                >
+                    Analyze Answer
+                </button>
+
+            </div>
+
+            <div id="speechStatus" class="speech-status">
+                Click Speak and answer aloud. Your words will be transcribed automatically.
+            </div>
+
+        </form>
+
+        <div class="button-section">
+
+            {% if previous_index >= 0 %}
+
+            <a href="/interview/technical/{{ previous_index }}">
+
+                <button class="previous-btn">
+
+                    ⬅ Previous Question
+
+                </button>
+
+            </a>
+
+            {% endif %}
+
+            {% if next_index < total_questions %}
+
+            <a href="/interview/technical/{{ next_index }}">
+
+                <button class="next-btn">
+
+                    Next Question ➡
+
+                </button>
+
+            </a>
+
+            {% else %}
+
+            <a href="/interview/technical/{{ total_questions }}">
+
+                <button class="next-btn">
+
+                    Finish Interview ✅
+
+                </button>
+
+            </a>
+
+            {% endif %}
+
+        </div>
+
+        {% if feedback %}
+
+        <div class="feedback-box">
+
+            <div class="feedback-title">
+
+                🤖 AI Feedback Report
+
+            </div>
+
+            <div class="feedback-content">
+
+                {{ feedback_html|safe }}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+        {% else %}
+
+        <div class="empty">
+
+            No Technical Questions Added Yet
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <script>
+
+        function startListening(){
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const statusElement = document.getElementById('speechStatus');
+            const textarea = document.getElementById('answerBox');
+            const micButton = document.getElementById('micButton');
+            const form = textarea.closest('form');
+
+            if (!SpeechRecognition) {
+                statusElement.textContent = 'Speech recognition is not supported in this browser.';
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
+            recognition.continuous = true;
+
+            micButton.disabled = true;
+            micButton.classList.add('listening');
+            statusElement.textContent = 'Listening... please speak your answer clearly.';
+
+            recognition.onresult = function(event){
+                let transcript = '';
+                for (let i = 0; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                textarea.value = transcript;
+
+                const lastResult = event.results[event.results.length - 1];
+                if (lastResult && lastResult.isFinal) {
+                    statusElement.textContent = 'Transcription complete. Submitting your answer...';
+                } else {
+                    statusElement.textContent = 'Listening... ' + transcript;
+                }
+            };
+
+            recognition.onerror = function(event){
+                micButton.disabled = false;
+                micButton.classList.remove('listening');
+                statusElement.textContent = 'Speech recognition error: ' + event.error;
+            };
+
+            recognition.onend = function(){
+                micButton.disabled = false;
+                micButton.classList.remove('listening');
+
+                if (textarea.value.trim()) {
+                    statusElement.textContent = 'Voice answer recorded. Sending for analysis...';
+                    setTimeout(function(){
+                        form.submit();
+                    }, 600);
+                } else {
+                    statusElement.textContent = 'No voice input detected. Please try again.';
+                }
+            };
+
+            recognition.start();
+        }
+
+    </script>
+
+</body>
+
+</html>

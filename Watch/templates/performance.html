@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Performance Metrics</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            display:flex;
+            background:linear-gradient(135deg,#020617,#0f172a,#1e3a8a);
+            color:white;
+            min-height:100vh;
+            overflow-x:hidden;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar{
+            width:270px;
+            background:rgba(17,24,39,0.95);
+            padding:35px 25px;
+            backdrop-filter:blur(10px);
+            border-right:1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar h2{
+            color:#38bdf8;
+            margin-bottom:50px;
+            text-align:center;
+            font-size:32px;
+        }
+
+        .sidebar ul{
+            list-style:none;
+        }
+
+        .sidebar ul li{
+            margin:28px 0;
+        }
+
+        .sidebar ul li a{
+            text-decoration:none;
+            color:white;
+            font-size:18px;
+            transition:0.3s;
+            padding:14px 18px;
+            display:block;
+            border-radius:14px;
+        }
+
+        .sidebar ul li a:hover{
+            background:#38bdf8;
+            color:black;
+            transform:translateX(6px);
+        }
+
+        /* MAIN SECTION */
+
+        .main{
+            flex:1;
+            padding:45px;
+        }
+
+        .top-section{
+            margin-bottom:45px;
+        }
+
+        .top-section h1{
+            font-size:45px;
+            line-height:1.5;
+            margin-bottom:15px;
+        }
+
+        .top-section span{
+            color:#38bdf8;
+        }
+
+        .welcome-text{
+            color:#cbd5e1;
+            font-size:18px;
+            line-height:1.8;
+        }
+
+        /* STATS CARDS */
+
+        .stats-grid{
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:25px;
+            margin-bottom:45px;
+        }
+
+        .stat-card{
+            background:rgba(255,255,255,0.08);
+            padding:30px;
+            border-radius:20px;
+            backdrop-filter:blur(12px);
+            border:1px solid rgba(255,255,255,0.1);
+            text-align:center;
+            transition:0.3s;
+        }
+
+        .stat-card:hover{
+            transform:translateY(-8px);
+            box-shadow:0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .stat-number{
+            font-size:42px;
+            color:#38bdf8;
+            font-weight:bold;
+            margin-bottom:10px;
+        }
+
+        .stat-label{
+            color:#cbd5e1;
+            font-size:16px;
+        }
+
+        /* PERFORMANCE CARDS */
+
+        .performance-cards{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:25px;
+        }
+
+        .perf-card{
+            background:rgba(255,255,255,0.08);
+            padding:35px;
+            border-radius:20px;
+            backdrop-filter:blur(12px);
+            border:1px solid rgba(255,255,255,0.1);
+            transition:0.3s;
+            min-height:280px;
+        }
+
+        .perf-card:hover{
+            transform:translateY(-10px);
+            box-shadow:0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .perf-card h2{
+            color:#38bdf8;
+            margin-bottom:20px;
+            font-size:24px;
+        }
+
+        .progress-bar{
+            width:100%;
+            height:12px;
+            background:rgba(255,255,255,0.1);
+            border-radius:10px;
+            overflow:hidden;
+            margin:20px 0;
+        }
+
+        .progress-fill{
+            height:100%;
+            background:linear-gradient(90deg,#38bdf8,#8b5cf6);
+            border-radius:10px;
+        }
+
+        .progress-label{
+            display:flex;
+            justify-content:space-between;
+            color:#cbd5e1;
+            font-size:14px;
+            margin-bottom:10px;
+        }
+
+        .perf-text{
+            color:#cbd5e1;
+            line-height:1.8;
+            font-size:15px;
+        }
+
+        .back-link{
+            display:inline-block;
+            margin-bottom:30px;
+            padding:12px 25px;
+            background:#38bdf8;
+            color:black;
+            text-decoration:none;
+            border-radius:12px;
+            font-weight:bold;
+            transition:0.3s;
+        }
+
+        .back-link:hover{
+            transform:scale(1.05);
+        }
+
+        @media(max-width:1100px){
+            .stats-grid, .performance-cards{
+                grid-template-columns:1fr;
+            }
+
+            body{
+                flex-direction:column;
+            }
+
+            .sidebar{
+                width:100%;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>AI Interview</h2>
+
+        <ul>
+
+            <li>
+                <a href="/">🏠 Home</a>
+            </li>
+
+            <li>
+                <a href="/dashboard">📊 Dashboard</a>
+            </li>
+
+            <li>
+                <a href="/interview">🎤 Interviews</a>
+            </li>
+
+            <li>
+                <a href="/performance">📈 Performance</a>
+            </li>
+
+            <li>
+                <a href="/reports">📄 Reports</a>
+            </li>
+
+            <li>
+                <a href="/login">🚪 Logout</a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+
+    <div class="main">
+
+        <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+
+        <div class="top-section">
+
+            <h1>📈 Performance <span>Analytics</span></h1>
+
+            <p class="welcome-text">
+
+                Track your interview practice progress and improvement over time.
+                Monitor your scores, accuracy, and growth in different interview categories.
+
+            </p>
+
+        </div>
+
+        <form method="POST" action="/performance/restart/" style="margin-bottom:30px; text-align:right;">
+            {% csrf_token %}
+            <button class="start-btn" type="submit">Restart Progress</button>
+        </form>
+
+        <!-- STATS OVERVIEW -->
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-number">{{ total_interviews }}</div>
+                <div class="stat-label">Completed Interviews</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-number">{{ average_score|floatformat:1 }}</div>
+                <div class="stat-label">Avg Score</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-number">{{ accuracy }}%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-number">{{ total_time_text }}</div>
+                <div class="stat-label">Total Practice Time</div>
+            </div>
+
+        </div>
+
+        <!-- PERFORMANCE BY CATEGORY -->
+
+        <h2 style="margin-bottom:25px; color:#38bdf8; font-size:28px;">Performance by Category</h2>
+
+        <div class="performance-cards">
+
+            {% for category, stats in category_stats.items %}
+
+            <div class="perf-card">
+
+                <h2>
+                    {% if category == 'HR' %}💼 HR Interview{% elif category == 'Technical' %}💻 Technical{% else %}🧠 Aptitude{% endif %}
+                </h2>
+
+                {% if stats.count > 0 %}
+
+                <div class="progress-label">
+                    <span>Communication</span>
+                    <span>{{ stats.avg_communication|floatformat:1 }}/10</span>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:{{ stats.avg_communication|floatformat:0 }}%;"></div>
+                </div>
+
+                <div class="progress-label">
+                    <span>Confidence</span>
+                    <span>{{ stats.avg_confidence|floatformat:1 }}/10</span>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:{{ stats.avg_confidence|floatformat:0 }}%;"></div>
+                </div>
+
+                <div class="progress-label">
+                    <span>Overall</span>
+                    <span>{{ stats.avg_overall|floatformat:1 }}/10</span>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:{{ stats.avg_overall|floatformat:0 }}%;"></div>
+                </div>
+
+                <p class="perf-text" style="margin-top:20px;">
+                    Completed {{ stats.count }} {{ category }} interview{{ stats.count|pluralize }}.
+                </p>
+
+                {% else %}
+
+                <p class="perf-text">
+                    No {{ category }} interviews completed yet. Finish questions in this category to see progress and scores.
+                </p>
+
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+                <div class="progress-label">
+                    <span>Overall</span>
+                    <span>8.0/10</span>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:80%;"></div>
+                </div>
+
+                <p class="perf-text" style="margin-top:20px;">
+
+                    Your aptitude scores are excellent!
+                    Work on improving your problem-solving speed.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
