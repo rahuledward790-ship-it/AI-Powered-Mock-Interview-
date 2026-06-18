@@ -177,6 +177,8 @@
         .btn-hire.deselect { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
         .btn-download { background: rgba(56,189,248,0.12); color: #67e8f9; border: 1px solid rgba(56,189,248,0.25); }
         .btn-download:hover { background: rgba(56,189,248,0.22); }
+        .btn-delete { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+        .btn-delete:hover { background: rgba(239,68,68,0.22); }
 
         /* TABLE */
         .table-wrap {
@@ -259,6 +261,8 @@
     <div class="tabs-bar">
         <button class="tab-btn active" onclick="showTab('candidates', this)">👥 Candidates & Resumes</button>
         <button class="tab-btn" onclick="showTab('interviews', this)">🎤 Mock Interview Details</button>
+        <button class="tab-btn" onclick="showTab('hr_interviews', this)">💼 HR Interview Details</button>
+        <button class="tab-btn" onclick="showTab('tech_interviews', this)">💻 Technical Interview Details</button>
         <button class="tab-btn" onclick="showTab('aptitudes', this)">🧠 Aptitude Test Details</button>
     </div>
 
@@ -310,6 +314,9 @@
                         <a href="/media/{{ cand.resume.resume_file }}" target="_blank" class="btn-sm btn-download">⬇ Download Resume</a>
                         <a href="/admin-dashboard/hire/{{ cand.resume.id }}/" class="btn-sm btn-hire {% if cand.hiring_status == 'Selected' %}deselect{% endif %}">
                             {% if cand.hiring_status == 'Selected' %}✕ Deselect{% else %}✓ Select for Hiring{% endif %}
+                        </a>
+                        <a href="/admin-dashboard/delete-resume/{{ cand.resume.id }}/" class="btn-sm btn-delete" onclick="return confirm('Are you sure you want to delete this resume?');">
+                            🗑 Delete Resume
                         </a>
                         {% else %}
                         <span style="color:#475569; font-size:13px;">No resume uploaded</span>
@@ -388,6 +395,156 @@
                 </table>
                 {% else %}
                 <div class="empty-msg">No interview attempts have been recorded yet.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- TAB: HR INTERVIEW DETAILS -->
+        <div class="section" id="tab-hr_interviews">
+            <div class="section-header">
+                <div>
+                    <h2>💼 HR Interview Details</h2>
+                    <span>Tracked attempts for HR interviews</span>
+                </div>
+                <span class="count-badge">{{ hr_interviews|length }} Attempts</span>
+            </div>
+
+            <div class="table-wrap">
+                {% if hr_interviews %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Candidate</th>
+                            <th>Duration</th>
+                            <th>Question Asked</th>
+                            <th>Question Type</th>
+                            <th>Attempt #</th>
+                            <th>Answer Given</th>
+                            <th>Confidence</th>
+                            <th>Communication</th>
+                            <th>Overall Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attempt in hr_interviews %}
+                        <tr>
+                            <td style="white-space:nowrap;">{{ attempt.created_at|date:"M d, Y H:i" }}</td>
+                            <td>
+                                <strong>{{ attempt.user.first_name|default:attempt.user.username }}</strong><br>
+                                <span style="color:#475569; font-size:12px;">{{ attempt.user.email }}</span>
+                            </td>
+                            <td style="white-space:nowrap;">{{ attempt.duration_seconds|floatformat:0 }}s</td>
+                            <td style="max-width:200px; font-size:12px; color:#94a3b8;">
+                                {{ attempt.question.question|truncatechars:60 }}
+                            </td>
+                            <td>
+                                <span class="cat-tag cat-hr">
+                                    {{ attempt.category }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="score-chip score-mid">
+                                    #{{ attempt.attempt_number }}
+                                </span>
+                            </td>
+                            <td class="answer-preview" title="{{ attempt.answer }}">{{ attempt.answer|truncatechars:55 }}</td>
+                            <td>
+                                <span class="score-chip {% if attempt.confidence_score >= 7 %}score-high{% elif attempt.confidence_score >= 5 %}score-mid{% else %}score-low{% endif %}">
+                                    {{ attempt.confidence_score|floatformat:1 }}/10
+                                </span>
+                            </td>
+                            <td>
+                                <span class="score-chip {% if attempt.communication_score >= 7 %}score-high{% elif attempt.communication_score >= 5 %}score-mid{% else %}score-low{% endif %}">
+                                    {{ attempt.communication_score|floatformat:1 }}/10
+                                </span>
+                            </td>
+                            <td>
+                                <span class="score-chip {% if attempt.score >= 7 %}score-high{% elif attempt.score >= 5 %}score-mid{% else %}score-low{% endif %}">
+                                    {{ attempt.score|floatformat:1 }}/10
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-msg">No HR interview attempts have been recorded yet.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- TAB: TECHNICAL INTERVIEW DETAILS -->
+        <div class="section" id="tab-tech_interviews">
+            <div class="section-header">
+                <div>
+                    <h2>💻 Technical Interview Details</h2>
+                    <span>Tracked attempts for Technical interviews</span>
+                </div>
+                <span class="count-badge">{{ tech_interviews|length }} Attempts</span>
+            </div>
+
+            <div class="table-wrap">
+                {% if tech_interviews %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Candidate</th>
+                            <th>Duration</th>
+                            <th>Question Asked</th>
+                            <th>Question Type</th>
+                            <th>Attempt #</th>
+                            <th>Answer Given</th>
+                            <th>Confidence</th>
+                            <th>Communication</th>
+                            <th>Overall Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attempt in tech_interviews %}
+                        <tr>
+                            <td style="white-space:nowrap;">{{ attempt.created_at|date:"M d, Y H:i" }}</td>
+                            <td>
+                                <strong>{{ attempt.user.first_name|default:attempt.user.username }}</strong><br>
+                                <span style="color:#475569; font-size:12px;">{{ attempt.user.email }}</span>
+                            </td>
+                            <td style="white-space:nowrap;">{{ attempt.duration_seconds|floatformat:0 }}s</td>
+                            <td style="max-width:200px; font-size:12px; color:#94a3b8;">
+                                {{ attempt.question.question|truncatechars:60 }}
+                            </td>
+                            <td>
+                                <span class="cat-tag cat-tech">
+                                    {{ attempt.category }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="score-chip score-mid">
+                                    #{{ attempt.attempt_number }}
+                                </span>
+                            </td>
+                            <td class="answer-preview" title="{{ attempt.answer }}">{{ attempt.answer|truncatechars:55 }}</td>
+                            <td>
+                                <span class="score-chip {% if attempt.confidence_score >= 7 %}score-high{% elif attempt.confidence_score >= 5 %}score-mid{% else %}score-low{% endif %}">
+                                    {{ attempt.confidence_score|floatformat:1 }}/10
+                                </span>
+                            </td>
+                            <td>
+                                <span class="score-chip {% if attempt.communication_score >= 7 %}score-high{% elif attempt.communication_score >= 5 %}score-mid{% else %}score-low{% endif %}">
+                                    {{ attempt.communication_score|floatformat:1 }}/10
+                                </span>
+                            </td>
+                            <td>
+                                <span class="score-chip {% if attempt.score >= 7 %}score-high{% elif attempt.score >= 5 %}score-mid{% else %}score-low{% endif %}">
+                                    {{ attempt.score|floatformat:1 }}/10
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-msg">No Technical interview attempts have been recorded yet.</div>
                 {% endif %}
             </div>
         </div>

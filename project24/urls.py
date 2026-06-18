@@ -100,6 +100,7 @@ urlpatterns = [
 
     # RESUME UPLOAD
     path('upload-resume/', upload_resume),
+    path('delete-resume/', delete_own_resume),
 
     # AJAX SAVE ATTEMPT (from SPA interview)
     path('interview/save_attempt/', save_attempt),
@@ -108,5 +109,6 @@ urlpatterns = [
     path('admin-dashboard/login/', admin_login),
     path('admin-dashboard/', admin_dashboard),
     path('admin-dashboard/hire/<int:resume_id>/', admin_hire_candidate),
+    path('admin-dashboard/delete-resume/<int:resume_id>/', admin_delete_resume),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

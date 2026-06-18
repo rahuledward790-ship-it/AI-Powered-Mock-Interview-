@@ -55,6 +55,7 @@ class InterviewAttempt(models.Model):
     fluency_score = models.FloatField(default=0.0)
     grammar_analysis = models.TextField(blank=True)
     duration_seconds = models.FloatField(default=0)
+    is_mock = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

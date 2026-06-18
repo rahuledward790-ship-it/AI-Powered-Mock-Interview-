@@ -549,7 +549,8 @@ def save_attempt(request):
                 eye_contact_score=eye_contact_score,
                 fluency_score=fluency_score,
                 grammar_analysis=grammar_analysis,
-                duration_seconds=duration
+                duration_seconds=duration,
+                is_mock=True
             )
             return JsonResponse({'status': 'success'})
         except Exception as e:
@@ -611,12 +612,27 @@ def admin_dashboard(request):
             'hiring_status': resume.hiring_status,
         })
         
-    interviews = InterviewAttempt.objects.select_related('user', 'question').all().order_by('-created_at')
+    mock_interviews = InterviewAttempt.objects.filter(is_mock=True).select_related('user', 'question').all().order_by('-created_at')
+    
+    hr_interviews = InterviewAttempt.objects.filter(is_mock=False, category='HR').select_related('user', 'question').all().order_by('-created_at')
+    for attempt in hr_interviews:
+        attempt.attempt_number = InterviewAttempt.objects.filter(
+            user=attempt.user, is_mock=False, category='HR', created_at__lte=attempt.created_at
+        ).count()
+        
+    tech_interviews = InterviewAttempt.objects.filter(is_mock=False, category='Technical').select_related('user', 'question').all().order_by('-created_at')
+    for attempt in tech_interviews:
+        attempt.attempt_number = InterviewAttempt.objects.filter(
+            user=attempt.user, is_mock=False, category='Technical', created_at__lte=attempt.created_at
+        ).count()
+        
     aptitudes = AptitudeAttempt.objects.select_related('user', 'question').all().order_by('-created_at')
     
     context = {
         'candidates': candidates_list,
-        'interviews': interviews,
+        'interviews': mock_interviews,
+        'hr_interviews': hr_interviews,
+        'tech_interviews': tech_interviews,
         'aptitudes': aptitudes,
     }
     return render(request, 'admin_dashboard.html', context)
@@ -637,4 +653,39 @@ def admin_hire_candidate(request, resume_id):
     except Resume.DoesNotExist:
         pass
         
-    return redirect('/admin-dashboard/')
+    return redirect('/admin-dashboard/')
+
+
+def admin_delete_resume(request, resume_id):
+    if not request.user.is_authenticated or request.user.username != 'admin':
+        return redirect('/admin-dashboard/login/')
+        
+    from .models import Resume
+    try:
+        resume = Resume.objects.get(id=resume_id)
+        if resume.resume_file:
+            try:
+                resume.resume_file.delete(save=False)
+            except Exception:
+                pass
+        resume.delete()
+    except Resume.DoesNotExist:
+        pass
+        
+    return redirect('/admin-dashboard/')
+
+
+def delete_own_resume(request):
+    if request.user.is_authenticated:
+        from .models import Resume
+        try:
+            resume = Resume.objects.get(user=request.user)
+            if resume.resume_file:
+                try:
+                    resume.resume_file.delete(save=False)
+                except Exception:
+                    pass
+            resume.delete()
+        except Resume.DoesNotExist:
+            pass
+    return redirect('/dashboard')

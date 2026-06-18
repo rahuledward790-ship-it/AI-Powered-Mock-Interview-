@@ -144,6 +144,7 @@
             white-space: nowrap;
         }
         .upload-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(56,189,248,0.3); }
+        .upload-btn.remove-btn:hover { box-shadow: 0 8px 24px rgba(239,68,68,0.35); }
 
         /* TWO-COLUMN GRID */
         .dashboard-grid {
@@ -433,9 +434,16 @@
                     <span class="resume-status missing">✕ MISSING</span>
                 {% endif %}
             </div>
-            <button class="upload-btn" onclick="openModal()">
-                {% if resume %}🔄 Update Resume{% else %}📤 Upload Your Resume{% endif %}
-            </button>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button class="upload-btn" onclick="openModal()">
+                    {% if resume %}🔄 Update Resume{% else %}📤 Upload Your Resume{% endif %}
+                </button>
+                {% if resume %}
+                <a href="/delete-resume/" class="upload-btn remove-btn" style="background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); text-decoration: none; display: inline-flex; align-items: center;" onclick="return confirm('Are you sure you want to remove your resume?');">
+                    🗑 Remove Resume
+                </a>
+                {% endif %}
+            </div>
         </div>
 
         <!-- DASHBOARD TWO-COLUMN GRID -->
