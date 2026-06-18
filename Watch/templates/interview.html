@@ -644,6 +644,7 @@
         let questionHistory = [];
         let historyPosition = -1;
         let latestCameraWarnings = [];
+        let questionStartTime = Date.now();
 
         const fillerWords = ["um", "uh", "like", "you know"];
         const questionText = document.getElementById("questionText");
@@ -671,6 +672,7 @@
             questionHistory = [];
             historyPosition = -1;
             document.getElementById("answerText").value = "";
+            questionStartTime = Date.now();
         }
 
         function enableCamera() {
@@ -759,6 +761,7 @@
             interviewRunning = true;
             questionHistory = [{ question: questionText.textContent, answer: "" }];
             historyPosition = 0;
+            questionStartTime = Date.now();
             speakCurrentQuestion();
         }
 
@@ -784,6 +787,7 @@
             questionHistory = questionHistory.slice(0, historyPosition + 1);
             questionHistory.push({ question: nextText, answer: "" });
             historyPosition = questionHistory.length - 1;
+            questionStartTime = Date.now();
             speakCurrentQuestion();
         }
 
@@ -798,6 +802,7 @@
             questionText.textContent = previous.question;
             document.getElementById("answerText").value = previous.answer || "";
             document.getElementById("startWarning").classList.remove("active");
+            questionStartTime = Date.now();
             speak("Previous question. " + previous.question);
         }
 
@@ -990,15 +995,66 @@
             const grammar = clamp(8 - grammarIssues(answer).length - Math.max(0, fillerCount - 1));
             const overall = clamp((communication + confidence + technical + grammar) / 4);
 
+            // Dynamic camera-based scoring
+            const monitorListHtml = document.getElementById("monitorList").innerHTML;
+            const hasEyeContactIssue = monitorListHtml.includes("eye contact");
+            const hasPostureIssue = monitorListHtml.includes("posture") || monitorListHtml.includes("centered");
+            const eyeContact = cameraEnabled ? (hasEyeContactIssue ? 6.0 : 8.5) : 1.0;
+            const bodyLanguage = cameraEnabled ? (hasPostureIssue ? 6.5 : 8.5) : 1.0;
+            const fluency = clamp(10 - fillerCount * 1.5);
+
             setScore("confidenceScore", confidence);
             setScore("communicationScore", communication);
             setScore("technicalScore", technical);
             setScore("grammarScore", grammar);
+            setScore("eyeContactScore", Math.round(eyeContact));
+            setScore("professionalismScore", cameraEnabled ? 8 : 2);
             setScore("overallScore", overall);
+
             renderFeedback(answer, { communication, confidence, technical, grammar, overall, words, fillerCount });
             storeLocalScore(overall);
             drawProgressChart();
             speak("Thank you. I have reviewed your answer. " + createSpokenFeedback(overall));
+
+            // AJAX SAVE TO BACKEND DATABASE
+            const typeSelect = document.getElementById("interviewType").value;
+            let categoryName = "HR";
+            if (typeSelect === "technical" || typeSelect === "cs") {
+                categoryName = "Technical";
+            }
+
+            const feedbackSummary = document.getElementById("summaryList").innerText + "\n\n" + document.getElementById("feedbackList").innerText;
+            const durationSecs = (Date.now() - questionStartTime) / 1000;
+
+            const payload = {
+                question: questionText.textContent,
+                answer: answer || "[No speech input detected]",
+                category: categoryName,
+                overall: overall,
+                communication: communication,
+                confidence: confidence,
+                body_language: bodyLanguage,
+                eye_contact: eyeContact,
+                fluency: fluency,
+                grammar_analysis: grammarIssues(answer).join(", ") || "No major grammatical issues.",
+                duration: durationSecs,
+                feedback: feedbackSummary
+            };
+
+            fetch('/interview/save_attempt/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Attempt saved successfully:", data);
+            })
+            .catch(err => {
+                console.error("Error saving attempt:", err);
+            });
         }
 
         function scoreRelevance(answer, question) {

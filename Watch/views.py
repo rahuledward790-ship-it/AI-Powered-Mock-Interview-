@@ -68,7 +68,11 @@ def register(request):
 # DASHBOARD PAGE
 
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    from .models import Resume
+    resume = None
+    if request.user.is_authenticated:
+        resume = Resume.objects.filter(user=request.user).first()
+    return render(request, 'dashboard.html', {'resume': resume})
 
 
 CATEGORY_MAP = {
@@ -131,6 +135,35 @@ def save_interview_attempt(request, question, answer, feedback, category_label):
             communication_score=communication_score,
             confidence_score=confidence_score,
             duration_seconds=duration_seconds,
+        )
+
+
+def save_aptitude_attempt(request, question, answer, feedback):
+    try:
+        duration_seconds = 0.0
+        start_time = request.session.get('question_start_time')
+        if start_time is not None:
+            duration_seconds = max(0.0, time.time() - float(start_time))
+    except Exception:
+        duration_seconds = 0.0
+
+    communication_score, confidence_score, score = parse_feedback_metrics(feedback)
+    is_correct = score >= 7.0
+    marks_scored = 10 if is_correct else 0
+    percentage = (score / 10.0) * 100.0
+    final_result = 'Pass' if is_correct else 'Fail'
+
+    if request.user.is_authenticated and answer and feedback and not feedback.startswith('Error:'):
+        from .models import AptitudeAttempt
+        AptitudeAttempt.objects.create(
+            user=request.user,
+            question=question,
+            answer=answer,
+            score=marks_scored,
+            percentage=percentage,
+            time_taken=int(duration_seconds),
+            is_correct=is_correct,
+            final_result=final_result,
         )
 
 
@@ -252,33 +285,35 @@ def learnmore(request):
 # HR INTERVIEW PAGE
 
 def hr_interview(request, index=0):
-
-    questions = InterviewQuestion.objects.filter(
-        category='HR'
-    )
-
+    questions = InterviewQuestion.objects.filter(category='HR')
     questions = list(questions)
-
     total_questions = len(questions)
-
     feedback = ""
-
     answer = ""
 
     if total_questions == 0:
+        return render(request, 'hr.html', {'question': None})
 
+    if index == 0:
+        request.session['hr_start_time'] = time.time()
+
+    start_time = request.session.get('hr_start_time')
+    if start_time is None:
+        request.session['hr_start_time'] = time.time()
+        start_time = request.session['hr_start_time']
+
+    remaining_seconds = 300 - int(time.time() - start_time)
+    if remaining_seconds <= 0:
         return render(request, 'hr.html', {
-            'question': None
+            'completed': True,
+            'time_over': True,
+            'total_questions': total_questions
         })
 
     if index >= total_questions:
-
         return render(request, 'hr.html', {
-
             'completed': True,
-
             'total_questions': total_questions
-
         })
 
     if index < 0:
@@ -290,52 +325,27 @@ def hr_interview(request, index=0):
         request.session['question_start_time'] = time.time()
 
     if request.method == 'POST':
-
         answer = request.POST.get('answer')
-
         if answer:
-
             try:
-
-                feedback = analyze_answer(
-                    question.question,
-                    answer
-                )
-
-                save_interview_attempt(
-                    request,
-                    question,
-                    answer,
-                    feedback,
-                    'HR'
-                )
-
+                feedback = analyze_answer(question.question, answer)
+                save_interview_attempt(request, question, answer, feedback, 'HR')
             except Exception as e:
-
                 feedback = f"Error: {e}"
 
     next_index = index + 1
-
     previous_index = index - 1
 
     context = {
-
         'question': question,
-
         'next_index': next_index,
-
         'previous_index': previous_index,
-
         'current_index': index + 1,
-
         'total_questions': total_questions,
-
         'feedback': feedback,
-
         'feedback_html': mark_safe(format_feedback_html(feedback)),
-
-        'answer': answer
-
+        'answer': answer,
+        'remaining_seconds': max(0, remaining_seconds),
     }
 
     return render(request, 'hr.html', context)
@@ -344,33 +354,35 @@ def hr_interview(request, index=0):
 # TECHNICAL INTERVIEW PAGE
 
 def technical_interview(request, index=0):
-
-    questions = InterviewQuestion.objects.filter(
-        category='Python'
-    )
-
+    questions = InterviewQuestion.objects.filter(category='Python')
     questions = list(questions)
-
     total_questions = len(questions)
-
     feedback = ""
-
     answer = ""
 
     if total_questions == 0:
+        return render(request, 'technical.html', {'question': None})
 
+    if index == 0:
+        request.session['technical_start_time'] = time.time()
+
+    start_time = request.session.get('technical_start_time')
+    if start_time is None:
+        request.session['technical_start_time'] = time.time()
+        start_time = request.session['technical_start_time']
+
+    remaining_seconds = 600 - int(time.time() - start_time)
+    if remaining_seconds <= 0:
         return render(request, 'technical.html', {
-            'question': None
+            'completed': True,
+            'time_over': True,
+            'total_questions': total_questions
         })
 
     if index >= total_questions:
-
         return render(request, 'technical.html', {
-
             'completed': True,
-
             'total_questions': total_questions
-
         })
 
     if index < 0:
@@ -382,52 +394,27 @@ def technical_interview(request, index=0):
         request.session['question_start_time'] = time.time()
 
     if request.method == 'POST':
-
         answer = request.POST.get('answer')
-
         if answer:
-
             try:
-
-                feedback = analyze_answer(
-                    question.question,
-                    answer
-                )
-
-                save_interview_attempt(
-                    request,
-                    question,
-                    answer,
-                    feedback,
-                    'Technical'
-                )
-
+                feedback = analyze_answer(question.question, answer)
+                save_interview_attempt(request, question, answer, feedback, 'Technical')
             except Exception as e:
-
                 feedback = f"Error: {e}"
 
     next_index = index + 1
-
     previous_index = index - 1
 
     context = {
-
         'question': question,
-
         'next_index': next_index,
-
         'previous_index': previous_index,
-
         'current_index': index + 1,
-
         'total_questions': total_questions,
-
         'feedback': feedback,
-
         'feedback_html': mark_safe(format_feedback_html(feedback)),
-
-        'answer': answer
-
+        'answer': answer,
+        'remaining_seconds': max(0, remaining_seconds),
     }
 
     return render(request, 'technical.html', context)
@@ -436,33 +423,35 @@ def technical_interview(request, index=0):
 # APTITUDE INTERVIEW PAGE
 
 def aptitude_interview(request, index=0):
-
-    questions = InterviewQuestion.objects.filter(
-        category='Aptitude'
-    )
-
+    questions = InterviewQuestion.objects.filter(category='Aptitude')
     questions = list(questions)
-
     total_questions = len(questions)
-
     feedback = ""
-
     answer = ""
 
     if total_questions == 0:
+        return render(request, 'aptitude.html', {'question': None})
 
+    if index == 0:
+        request.session['aptitude_start_time'] = time.time()
+
+    start_time = request.session.get('aptitude_start_time')
+    if start_time is None:
+        request.session['aptitude_start_time'] = time.time()
+        start_time = request.session['aptitude_start_time']
+
+    remaining_seconds = 600 - int(time.time() - start_time)
+    if remaining_seconds <= 0:
         return render(request, 'aptitude.html', {
-            'question': None
+            'completed': True,
+            'time_over': True,
+            'total_questions': total_questions
         })
 
     if index >= total_questions:
-
         return render(request, 'aptitude.html', {
-
             'completed': True,
-
             'total_questions': total_questions
-
         })
 
     if index < 0:
@@ -474,52 +463,178 @@ def aptitude_interview(request, index=0):
         request.session['question_start_time'] = time.time()
 
     if request.method == 'POST':
-
         answer = request.POST.get('answer')
-
         if answer:
-
             try:
-
-                feedback = analyze_answer(
-                    question.question,
-                    answer
-                )
-
-                save_interview_attempt(
-                    request,
-                    question,
-                    answer,
-                    feedback,
-                    'Aptitude'
-                )
-
+                feedback = analyze_answer(question.question, answer)
+                save_interview_attempt(request, question, answer, feedback, 'Aptitude')
+                save_aptitude_attempt(request, question, answer, feedback)
             except Exception as e:
-
                 feedback = f"Error: {e}"
 
     next_index = index + 1
-
     previous_index = index - 1
 
     context = {
-
         'question': question,
-
         'next_index': next_index,
-
         'previous_index': previous_index,
-
         'current_index': index + 1,
-
         'total_questions': total_questions,
-
         'feedback': feedback,
-
         'feedback_html': mark_safe(format_feedback_html(feedback)),
-
-        'answer': answer
-
+        'answer': answer,
+        'remaining_seconds': max(0, remaining_seconds),
     }
 
     return render(request, 'aptitude.html', context)
+
+
+# RESUME UPLOAD VIEW
+def upload_resume(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        phone_number = request.POST.get('phone_number', '')
+        resume_file = request.FILES.get('resume')
+        if resume_file:
+            from .models import Resume
+            # Remove previous resumes for this user
+            Resume.objects.filter(user=request.user).delete()
+            Resume.objects.create(
+                user=request.user,
+                phone_number=phone_number,
+                resume_file=resume_file
+            )
+    return redirect('/dashboard')
+
+
+# AJAX SAVE ATTEMPT VIEW
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
+def save_attempt(request):
+    import json
+    from django.http import JsonResponse
+    if request.method == 'POST' and request.user.is_authenticated:
+        try:
+            data = json.loads(request.body)
+            question_text = data.get('question', '')
+            answer_text = data.get('answer', '')
+            category = data.get('category', 'General')
+            
+            overall_score = float(data.get('overall', 0))
+            communication_score = float(data.get('communication', 0))
+            confidence_score = float(data.get('confidence', 0))
+            body_language_score = float(data.get('body_language', 0))
+            eye_contact_score = float(data.get('eye_contact', 0))
+            fluency_score = float(data.get('fluency', 0))
+            grammar_analysis = data.get('grammar_analysis', '')
+            duration = float(data.get('duration', 0))
+            feedback = data.get('feedback', '')
+            
+            from .models import InterviewQuestion, InterviewAttempt
+            q, created = InterviewQuestion.objects.get_or_create(
+                question=question_text,
+                defaults={'category': category, 'difficulty': 'Intermediate'}
+            )
+            
+            InterviewAttempt.objects.create(
+                user=request.user,
+                question=q,
+                category=category,
+                answer=answer_text,
+                feedback=feedback,
+                score=overall_score,
+                communication_score=communication_score,
+                confidence_score=confidence_score,
+                body_language_score=body_language_score,
+                eye_contact_score=eye_contact_score,
+                fluency_score=fluency_score,
+                grammar_analysis=grammar_analysis,
+                duration_seconds=duration
+            )
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'unauthorized'}, status=401)
+
+
+# CUSTOM ADMIN LOGIN AND DASHBOARD
+def admin_login(request):
+    error = ""
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        if username == 'admin' and password == 'admin123':
+            from django.contrib.auth.models import User
+            user, created = User.objects.get_or_create(
+                username='admin',
+                defaults={'is_superuser': True, 'is_staff': True}
+            )
+            if created or not user.check_password('admin123'):
+                user.set_password('admin123')
+                user.save()
+            
+            user = authenticate(request, username='admin', password='admin123')
+            if user is not None:
+                login(request, user)
+                return redirect('/admin-dashboard/')
+        else:
+            error = "Invalid admin credentials!"
+            
+    return render(request, 'admin_login.html', {'error': error})
+
+
+def admin_dashboard(request):
+    if not request.user.is_authenticated or request.user.username != 'admin':
+        return redirect('/admin-dashboard/login/')
+        
+    from .models import Resume, InterviewAttempt, AptitudeAttempt
+    
+    resumes = Resume.objects.select_related('user').all()
+    candidates_list = []
+    for resume in resumes:
+        latest_attempt = InterviewAttempt.objects.filter(user=resume.user).order_by('-created_at').first()
+        aptitude_attempt = AptitudeAttempt.objects.filter(user=resume.user).order_by('-created_at').first()
+        interview_date = None
+        if latest_attempt and aptitude_attempt:
+            interview_date = max(latest_attempt.created_at, aptitude_attempt.created_at)
+        elif latest_attempt:
+            interview_date = latest_attempt.created_at
+        elif aptitude_attempt:
+            interview_date = aptitude_attempt.created_at
+            
+        candidates_list.append({
+            'resume': resume,
+            'user': resume.user,
+            'phone_number': resume.phone_number,
+            'interview_date': interview_date,
+            'hiring_status': resume.hiring_status,
+        })
+        
+    interviews = InterviewAttempt.objects.select_related('user', 'question').all().order_by('-created_at')
+    aptitudes = AptitudeAttempt.objects.select_related('user', 'question').all().order_by('-created_at')
+    
+    context = {
+        'candidates': candidates_list,
+        'interviews': interviews,
+        'aptitudes': aptitudes,
+    }
+    return render(request, 'admin_dashboard.html', context)
+
+
+def admin_hire_candidate(request, resume_id):
+    if not request.user.is_authenticated or request.user.username != 'admin':
+        return redirect('/admin-dashboard/login/')
+        
+    from .models import Resume
+    try:
+        resume = Resume.objects.get(id=resume_id)
+        if resume.hiring_status == 'Selected':
+            resume.hiring_status = 'Pending'
+        else:
+            resume.hiring_status = 'Selected'
+        resume.save()
+    except Resume.DoesNotExist:
+        pass
+        
+    return redirect('/admin-dashboard/')

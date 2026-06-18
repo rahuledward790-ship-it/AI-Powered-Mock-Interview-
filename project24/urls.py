@@ -22,6 +22,8 @@ The `urlpatterns` list routes URLs to views.
 
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from Watch.views import *
 
@@ -96,4 +98,15 @@ urlpatterns = [
         aptitude_interview
     ),
 
-]
+    # RESUME UPLOAD
+    path('upload-resume/', upload_resume),
+
+    # AJAX SAVE ATTEMPT (from SPA interview)
+    path('interview/save_attempt/', save_attempt),
+
+    # CUSTOM ADMIN PORTAL
+    path('admin-dashboard/login/', admin_login),
+    path('admin-dashboard/', admin_dashboard),
+    path('admin-dashboard/hire/<int:resume_id>/', admin_hire_candidate),
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

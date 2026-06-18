@@ -1,327 +1,563 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>AI Dashboard</title>
-
+    <title>Dashboard | AI Mock Interview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial, Helvetica, sans-serif;
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e1b4b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        body{
-            display:flex;
-            background:linear-gradient(135deg,#020617,#0f172a,#1e3a8a);
-            color:white;
-            min-height:100vh;
-            overflow-x:hidden;
+        /* TOP NAV */
+        .topnav {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 0 40px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .topnav-brand {
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #38bdf8, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+        .topnav-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .nav-welcome {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        .nav-welcome span { color: #38bdf8; font-weight: 600; }
+        .nav-btn {
+            padding: 8px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+        }
+        .nav-btn.admin {
+            background: rgba(139, 92, 246, 0.15);
+            color: #a78bfa;
+            border: 1px solid rgba(139,92,246,0.3);
+        }
+        .nav-btn.admin:hover { background: rgba(139,92,246,0.3); transform: translateY(-1px); }
+        .nav-btn.logout {
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+            border: 1px solid rgba(239,68,68,0.25);
+        }
+        .nav-btn.logout:hover { background: rgba(239,68,68,0.25); transform: translateY(-1px); }
+
+        /* MAIN WRAPPER */
+        .main { max-width: 1400px; margin: 0 auto; padding: 40px 40px 60px; }
+
+        /* HERO HEADER */
+        .hero {
+            margin-bottom: 36px;
+        }
+        .hero h1 {
+            font-size: 40px;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+        .hero h1 span { background: linear-gradient(90deg, #38bdf8, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p {
+            color: #94a3b8;
+            font-size: 16px;
+            margin-top: 10px;
+            max-width: 560px;
+            line-height: 1.7;
         }
 
-        /* SIDEBAR */
+        /* RESUME BAR */
+        .resume-bar {
+            background: rgba(15,23,42,0.7);
+            border: 1px solid rgba(56,189,248,0.25);
+            border-radius: 18px;
+            padding: 20px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 36px;
+            backdrop-filter: blur(10px);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .resume-bar-left { display: flex; align-items: center; gap: 16px; }
+        .resume-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #38bdf8, #8b5cf6);
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+            flex: 0 0 auto;
+        }
+        .resume-info strong { color: #f8fafc; font-size: 16px; font-weight: 600; display: block; }
+        .resume-info small { color: #64748b; font-size: 13px; }
+        .resume-status {
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .resume-status.uploaded { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+        .resume-status.missing { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+        .upload-btn {
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #38bdf8, #8b5cf6);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            white-space: nowrap;
+        }
+        .upload-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(56,189,248,0.3); }
 
-        .sidebar{
-            width:270px;
-            background:rgba(17,24,39,0.95);
-            padding:35px 25px;
-            backdrop-filter:blur(10px);
-            border-right:1px solid rgba(255,255,255,0.1);
+        /* TWO-COLUMN GRID */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 28px;
+            align-items: start;
         }
 
-        .sidebar h2{
-            color:#38bdf8;
-            margin-bottom:50px;
-            text-align:center;
-            font-size:32px;
+        /* LEFT: MOCK INTERVIEW CARD */
+        .mock-card {
+            background: linear-gradient(145deg, rgba(56,189,248,0.12) 0%, rgba(139,92,246,0.08) 100%);
+            border: 1px solid rgba(56,189,248,0.2);
+            border-radius: 28px;
+            padding: 40px;
+            backdrop-filter: blur(14px);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            transition: all 0.35s;
+            min-height: 420px;
         }
-
-        .sidebar ul{
-            list-style:none;
+        .mock-card::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(56,189,248,0.15) 0%, transparent 70%);
+            pointer-events: none;
         }
-
-        .sidebar ul li{
-            margin:28px 0;
+        .mock-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(56,189,248,0.45);
+            box-shadow: 0 24px 60px rgba(56,189,248,0.15);
         }
-
-        .sidebar ul li a{
-            text-decoration:none;
-            color:white;
-            font-size:18px;
-            transition:0.3s;
-            padding:14px 18px;
-            display:block;
-            border-radius:14px;
+        .mock-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(56,189,248,0.15);
+            border: 1px solid rgba(56,189,248,0.3);
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #38bdf8;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
         }
-
-        .sidebar ul li a:hover{
-            background:#38bdf8;
-            color:black;
-            transform:translateX(6px);
+        .mock-card h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            line-height: 1.2;
         }
-
-        /* MAIN SECTION */
-
-        .main{
-            flex:1;
-            padding:45px;
+        .mock-card p {
+            color: #94a3b8;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 32px;
         }
-
-        .top-section{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:45px;
+        .mock-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 36px;
         }
-
-        .top-section h1{
-            font-size:45px;
-            line-height:1.5;
+        .mock-feature {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 13px;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-
-        .top-section span{
-            color:#38bdf8;
+        .mock-feature-icon { font-size: 16px; }
+        .start-interview-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #38bdf8, #8b5cf6);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
+        .start-interview-btn:hover { transform: scale(1.02); box-shadow: 0 12px 32px rgba(56,189,248,0.3); }
 
-        .welcome-text{
-            color:#cbd5e1;
-            margin-top:10px;
-            font-size:18px;
-            line-height:1.8;
+        /* RIGHT: CATEGORIES */
+        .categories-column { display: flex; flex-direction: column; gap: 20px; }
+        .categories-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 4px;
         }
+        .categories-subtitle { font-size: 13px; color: #64748b; margin-bottom: 4px; }
 
-        /* CARDS */
-
-        .cards{
-            display:grid;
-            grid-template-columns:repeat(3,1fr);
-            gap:30px;
+        .cat-card {
+            background: rgba(15,23,42,0.7);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 26px 28px;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
         }
-
-        .cards a{
-            text-decoration:none;
+        .cat-card:hover { border-color: var(--cat-color, #38bdf8); box-shadow: 0 12px 36px rgba(0,0,0,0.3); transform: translateX(6px); }
+        .cat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--cat-bg, rgba(56,189,248,0.15));
+            display: grid;
+            place-items: center;
+            font-size: 26px;
+            flex: 0 0 auto;
         }
-
-        .card{
-            background:rgba(255,255,255,0.08);
-            padding:35px;
-            border-radius:25px;
-            backdrop-filter:blur(12px);
-            border:1px solid rgba(255,255,255,0.1);
-            box-shadow:0 0 25px rgba(0,0,0,0.3);
-            transition:0.4s;
-            min-height:260px;
+        .cat-info { flex: 1; }
+        .cat-info h3 { font-size: 18px; font-weight: 700; color: #f8fafc; margin-bottom: 5px; }
+        .cat-info p { font-size: 13px; color: #64748b; line-height: 1.5; }
+        .cat-timer {
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            background: rgba(255,255,255,0.06);
+            color: #94a3b8;
+            white-space: nowrap;
         }
+        .cat-arrow { color: #475569; font-size: 18px; transition: 0.2s; }
+        .cat-card:hover .cat-arrow { color: var(--cat-color, #38bdf8); transform: translateX(4px); }
 
-        .card:hover{
-            transform:translateY(-10px) scale(1.02);
-            box-shadow:0 15px 35px rgba(0,0,0,0.5);
+        /* QUICK STATS */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
         }
-
-        .card h2{
-            color:#38bdf8;
-            margin-bottom:20px;
-            font-size:26px;
+        .stat-mini {
+            background: rgba(15,23,42,0.6);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 16px;
+            padding: 18px 20px;
+            text-align: center;
         }
+        .stat-mini strong { font-size: 28px; font-weight: 800; color: #38bdf8; display: block; }
+        .stat-mini span { font-size: 12px; color: #64748b; margin-top: 4px; display: block; }
 
-        .card p{
-            color:#cbd5e1;
-            line-height:1.9;
-            font-size:16px;
+        /* RESUME UPLOAD MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(2,6,23,0.88);
+            z-index: 500;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
         }
-
-        /* BUTTON */
-
-        .button-section{
-            margin-top:55px;
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: linear-gradient(145deg, #0f172a, #1e1b4b);
+            border: 1px solid rgba(56,189,248,0.25);
+            border-radius: 28px;
+            padding: 42px;
+            width: 90%;
+            max-width: 520px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            animation: slideUp 0.3s ease;
         }
-
-        .start-btn{
-            padding:18px 45px;
-            border:none;
-            border-radius:15px;
-            background:linear-gradient(90deg,#38bdf8,#8b5cf6);
-            color:white;
-            font-size:20px;
-            font-weight:bold;
-            cursor:pointer;
-            transition:0.3s;
-            box-shadow:0 10px 20px rgba(0,0,0,0.3);
+        @keyframes slideUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
+        .modal h2 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+        .modal p { color: #64748b; font-size: 14px; margin-bottom: 28px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #94a3b8; margin-bottom: 8px; letter-spacing: 0.3px; }
+        .form-group input[type="text"],
+        .form-group input[type="file"] {
+            width: 100%;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: #f8fafc;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: 0.2s;
         }
-
-        .start-btn:hover{
-            transform:scale(1.05);
+        .form-group input[type="text"]:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.12); }
+        .form-group input[type="file"] { cursor: pointer; }
+        .modal-actions { display: flex; gap: 12px; margin-top: 28px; }
+        .modal-submit {
+            flex: 1;
+            padding: 14px;
+            background: linear-gradient(90deg, #38bdf8, #8b5cf6);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
         }
+        .modal-submit:hover { transform: scale(1.02); }
+        .modal-cancel {
+            padding: 14px 22px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: #94a3b8;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .modal-cancel:hover { background: rgba(255,255,255,0.1); }
+
+        /* LINKS */
+        a { color: inherit; }
 
         /* RESPONSIVE */
-
-        @media(max-width:1100px){
-
-            .cards{
-                grid-template-columns:1fr;
-            }
-
-            body{
-                flex-direction:column;
-            }
-
-            .sidebar{
-                width:100%;
-            }
-
+        @media (max-width: 960px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .main { padding: 24px 20px 50px; }
+            .hero h1 { font-size: 30px; }
+            .mock-features { grid-template-columns: 1fr; }
         }
-
     </style>
-
 </head>
-
 <body>
 
-    <!-- SIDEBAR -->
-
-    <div class="sidebar">
-
-        <h2>AI Interview</h2>
-
-        <ul>
-
-            <li>
-                <a href="/">🏠 Home</a>
-            </li>
-
-            <li>
-                <a href="/dashboard">📊 Dashboard</a>
-            </li>
-
-            <li>
-                <a href="/performance">📈 Performance</a>
-            </li>
-
-            <li>
-                <a href="/reports">📄 Reports</a>
-            </li>
-
-            <li>
-                <a href="/login">🚪 Logout</a>
-            </li>
-
-        </ul>
-
-    </div>
-
-    <!-- MAIN CONTENT -->
+    <!-- TOP NAVIGATION -->
+    <nav class="topnav">
+        <div class="topnav-brand">⚡ AI Mock Interview</div>
+        <div class="topnav-right">
+            <span class="nav-welcome">Welcome, <span>{{ request.user.first_name|default:request.user.username }}</span> 👋</span>
+            <a href="/performance" class="nav-btn admin" style="color:#67e8f9; border-color:rgba(103,232,249,0.3); background:rgba(103,232,249,0.08);">📈 Performance</a>
+            <a href="/reports" class="nav-btn admin" style="color:#86efac; border-color:rgba(134,239,172,0.3); background:rgba(134,239,172,0.08);">📄 Reports</a>
+            <a href="/admin-dashboard/login/" class="nav-btn admin">🔐 Admin</a>
+            <a href="/login" class="nav-btn logout">🚪 Logout</a>
+        </div>
+    </nav>
 
     <div class="main">
 
-        <div class="top-section">
+        <!-- HERO HEADER -->
+        <div class="hero">
+            <h1>Your <span>Interview</span> Command Center 🚀</h1>
+            <p>Master every round — HR, Technical, and Aptitude — with real-time AI coaching, live timers, and performance analytics.</p>
+        </div>
 
-            <div>
+        <!-- RESUME UPLOAD BAR -->
+        <div class="resume-bar">
+            <div class="resume-bar-left">
+                <div class="resume-icon">📄</div>
+                <div class="resume-info">
+                    {% if resume %}
+                        <strong>Resume Uploaded ✅</strong>
+                        <small>Uploaded on {{ resume.uploaded_at|date:"M d, Y" }} · Status: <strong style="color:{% if resume.hiring_status == 'Selected' %}#4ade80{% elif resume.hiring_status == 'Rejected' %}#f87171{% else %}#fbbf24{% endif %};">{{ resume.hiring_status }}</strong></small>
+                    {% else %}
+                        <strong>No Resume Uploaded</strong>
+                        <small>Upload your resume to let recruiters find you after your interview</small>
+                    {% endif %}
+                </div>
+                {% if resume %}
+                    <span class="resume-status uploaded">✓ UPLOADED</span>
+                {% else %}
+                    <span class="resume-status missing">✕ MISSING</span>
+                {% endif %}
+            </div>
+            <button class="upload-btn" onclick="openModal()">
+                {% if resume %}🔄 Update Resume{% else %}📤 Upload Your Resume{% endif %}
+            </button>
+        </div>
 
-                <h1>
-                    Welcome,
-                    <span>{{ request.user.first_name }}</span>
-                    🚀
-                </h1>
+        <!-- DASHBOARD TWO-COLUMN GRID -->
+        <div class="dashboard-grid">
 
-                <p class="welcome-text">
+            <!-- LEFT: MOCK INTERVIEW -->
+            <a href="/interview/" class="mock-card">
+                <div class="mock-badge">
+                    <span>🎯</span> Live Session
+                </div>
+                <h2>Mock Interview<br>Studio</h2>
+                <p>Experience a real-time AI interview with video, microphone, live confidence scoring, and instant structured feedback on every answer.</p>
 
-                    Improve your communication,
-                    technical knowledge,
-                    aptitude skills,
-                    and interview confidence
-                    using our AI-powered interview platform.
+                <div class="mock-features">
+                    <div class="mock-feature"><span class="mock-feature-icon">📹</span> Video Screen</div>
+                    <div class="mock-feature"><span class="mock-feature-icon">🤖</span> AI Interviewer</div>
+                    <div class="mock-feature"><span class="mock-feature-icon">🎤</span> Voice Recording</div>
+                    <div class="mock-feature"><span class="mock-feature-icon">⏱️</span> Live Timer</div>
+                    <div class="mock-feature"><span class="mock-feature-icon">💡</span> Confidence Track</div>
+                    <div class="mock-feature"><span class="mock-feature-icon">📊</span> Performance AI</div>
+                </div>
 
-                </p>
+                <button class="start-interview-btn" onclick="event.preventDefault(); window.location='/interview/';">
+                    🚀 Start Live Mock Interview
+                </button>
+            </a>
 
+            <!-- RIGHT: CATEGORIES + STATS -->
+            <div class="categories-column">
+                <div>
+                    <div class="categories-title">Interview Categories</div>
+                    <div class="categories-subtitle">Select a type to begin your timed practice session</div>
+                </div>
+
+                <!-- HR INTERVIEW -->
+                <a href="/interview/hr/" class="cat-card" style="--cat-color: #38bdf8; --cat-bg: rgba(56,189,248,0.12);">
+                    <div class="cat-icon">💼</div>
+                    <div class="cat-info">
+                        <h3>HR Interview</h3>
+                        <p>Communication, leadership, personality & behavioral questions</p>
+                    </div>
+                    <span class="cat-timer">⏱️ 5 Min</span>
+                    <span class="cat-arrow">→</span>
+                </a>
+
+                <!-- TECHNICAL INTERVIEW -->
+                <a href="/interview/technical/" class="cat-card" style="--cat-color: #8b5cf6; --cat-bg: rgba(139,92,246,0.12);">
+                    <div class="cat-icon">💻</div>
+                    <div class="cat-info">
+                        <h3>Technical Interview</h3>
+                        <p>Python, Java, DBMS, OOP, algorithms & coding concepts</p>
+                    </div>
+                    <span class="cat-timer">⏱️ 10 Min</span>
+                    <span class="cat-arrow">→</span>
+                </a>
+
+                <!-- APTITUDE TEST -->
+                <a href="/interview/aptitude/" class="cat-card" style="--cat-color: #10b981; --cat-bg: rgba(16,185,129,0.12);">
+                    <div class="cat-icon">🧠</div>
+                    <div class="cat-info">
+                        <h3>Aptitude Test</h3>
+                        <p>Logical reasoning, quantitative, and problem-solving questions</p>
+                    </div>
+                    <span class="cat-timer">⏱️ 10 Min</span>
+                    <span class="cat-arrow">→</span>
+                </a>
+
+                <!-- QUICK STATS -->
+                <div class="stats-row">
+                    <div class="stat-mini">
+                        <strong>3</strong>
+                        <span>Categories</span>
+                    </div>
+                    <div class="stat-mini">
+                        <strong>AI</strong>
+                        <span>Powered</span>
+                    </div>
+                    <div class="stat-mini">
+                        <strong>∞</strong>
+                        <span>Practice</span>
+                    </div>
+                </div>
             </div>
 
         </div>
-
-        <!-- DASHBOARD CARDS -->
-
-        <div class="cards">
-
-            <!-- HR INTERVIEW -->
-
-            <a href="/interview/hr">
-
-                <div class="card">
-
-                    <h2>💼 HR Interview</h2>
-
-                    <p>
-
-                        Practice personal interview questions
-                        like self introduction,
-                        strengths & weaknesses,
-                        leadership,
-                        communication,
-                        confidence,
-                        and personality-based questions.
-
-                    </p>
-
-                </div>
-
-            </a>
-
-            <!-- TECHNICAL INTERVIEW -->
-
-            <a href="/interview/technical">
-
-                <div class="card">
-
-                    <h2>💻 Technical Interview</h2>
-
-                    <p>
-
-                        Attend Python,
-                        Java,
-                        DBMS,
-                        coding,
-                        OOP concepts,
-                        and technical interview rounds
-                        with AI-powered practice sessions.
-
-                    </p>
-
-                </div>
-
-            </a>
-
-            <!-- APTITUDE TEST -->
-
-            <a href="/interview/aptitude">
-
-                <div class="card">
-
-                    <h2>🧠 Aptitude Test</h2>
-
-                    <p>
-
-                        Solve logical reasoning,
-                        quantitative aptitude,
-                        number series,
-                        analytical thinking,
-                        and problem-solving questions
-                        to improve placement preparation.
-
-                    </p>
-
-                </div>
-
-            </a>
-
-        </div>
-
     </div>
 
-</body>
+    <!-- RESUME UPLOAD MODAL -->
+    <div class="modal-overlay" id="resumeModal">
+        <div class="modal">
+            <h2>📤 Upload Your Resume</h2>
+            <p>Upload a PDF or DOCX file. We'll store it securely and link it to your profile.</p>
+            <form method="POST" action="/upload-resume/" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" id="phone_number" name="phone_number" placeholder="+91 98765 43210" value="{% if resume %}{{ resume.phone_number }}{% endif %}">
+                </div>
+                <div class="form-group">
+                    <label for="resume">Resume File (PDF / DOCX)</label>
+                    <input type="file" id="resume" name="resume" accept=".pdf,.docx,.doc" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="modal-submit">Upload Resume 🚀</button>
+                    <button type="button" class="modal-cancel" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
+    <script>
+        function openModal() {
+            document.getElementById('resumeModal').classList.add('active');
+        }
+        function closeModal() {
+            document.getElementById('resumeModal').classList.remove('active');
+        }
+        // Close modal on overlay click
+        document.getElementById('resumeModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+
+</body>
 </html>

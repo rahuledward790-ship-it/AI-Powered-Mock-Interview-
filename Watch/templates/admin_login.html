@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | AI Mock Interview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #020617 0%, #0f172a 55%, #1e1b4b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f8fafc;
+        }
+        .card {
+            width: 90%;
+            max-width: 440px;
+            background: rgba(15,23,42,0.9);
+            border: 1px solid rgba(139,92,246,0.3);
+            border-radius: 28px;
+            padding: 48px 44px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 16px;
+            background: rgba(139,92,246,0.15);
+            border: 1px solid rgba(139,92,246,0.35);
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #a78bfa;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+        h1 {
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 36px;
+            line-height: 1.6;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            letter-spacing: 0.3px;
+        }
+        .form-group input {
+            width: 100%;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: #f8fafc;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: 0.2s;
+        }
+        .form-group input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139,92,246,0.18);
+        }
+        .error-box {
+            background: rgba(239,68,68,0.12);
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: #f87171;
+            font-size: 14px;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #8b5cf6, #6d28d9);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-top: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(139,92,246,0.35); }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            color: #475569;
+            font-size: 13px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #94a3b8; }
+        .lock-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="lock-icon">🔐</div>
+        <div class="badge">Admin Portal</div>
+        <h1>Secure Admin<br>Access</h1>
+        <p class="subtitle">Only authorized administrators can access this dashboard. Your session is encrypted and monitored.</p>
+
+        {% if error %}
+        <div class="error-box">
+            ⚠️ {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Admin Username</label>
+                <input type="text" id="username" name="username" placeholder="admin" autocomplete="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Admin Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required>
+            </div>
+            <button type="submit" class="login-btn">🔓 Login to Admin Panel</button>
+        </form>
+        <a href="/dashboard" class="back-link">← Return to Dashboard</a>
+    </div>
+</body>
+</html>

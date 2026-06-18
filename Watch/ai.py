@@ -1,5 +1,7 @@
+import os
 import requests
 from transformers import pipeline
+import google.generativeai as genai
 
 OLLAMA_URL = "http://127.0.0.1:11434/api/generate"
 OLLAMA_MODEL = "mistral:latest"
@@ -40,6 +42,31 @@ def load_local_model():
 local_model = load_local_model()
 
 
+def call_gemini(question, answer):
+    api_key = os.environ.get("GOOGLE_API_KEY")
+    if not api_key:
+        return None
+    try:
+        genai.configure(api_key=api_key)
+        # Use gemini-1.5-flash as default, fallback to gemini-pro if needed
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        prompt = PROMPT_TEMPLATE.format(question=question, answer=answer)
+        response = model.generate_content(prompt)
+        if response and response.text:
+            return response.text.strip()
+    except Exception as e:
+        print("Gemini 1.5 error, trying fallback:", e)
+        try:
+            model = genai.GenerativeModel('gemini-pro')
+            prompt = PROMPT_TEMPLATE.format(question=question, answer=answer)
+            response = model.generate_content(prompt)
+            if response and response.text:
+                return response.text.strip()
+        except Exception as ex:
+            print("Gemini fallback error:", ex)
+    return None
+
+
 def call_ollama(question, answer):
     prompt = PROMPT_TEMPLATE.format(question=question, answer=answer)
     payload = {
@@ -77,15 +104,21 @@ def sanitize_feedback_text(text):
 # ANALYZE FUNCTION
 
 def analyze_answer(question, answer):
-    # Try Ollama first if the server is running
-    feedback = call_ollama(question, answer)
+    # 1. Try Gemini
+    feedback = call_gemini(question, answer)
     feedback = sanitize_feedback_text(feedback)
     if feedback:
-        # If the server returns a valid response, use it
         if "1. Communication Feedback" in feedback or "2. Grammar Improvements" in feedback:
             return feedback
 
-    # Fallback to local model only if Ollama did not return a valid answer
+    # 2. Try Ollama next if the server is running
+    feedback = call_ollama(question, answer)
+    feedback = sanitize_feedback_text(feedback)
+    if feedback:
+        if "1. Communication Feedback" in feedback or "2. Grammar Improvements" in feedback:
+            return feedback
+
+    # 3. Fallback to local model
     if local_model is None:
         return "Error: No AI model available. Start Ollama server or install transformers model."
 
@@ -105,4 +138,4 @@ def analyze_answer(question, answer):
             generated = generated[generated.index("1. Communication Feedback"):].strip()
         return generated
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"Error: {str(e)}"

@@ -324,15 +324,43 @@
             </p>
 
         </div>
+        {% if not completed %}
+        <!-- TIMER COMPONENT -->
+        <div class="timer-container" id="timerContainer" style="margin-bottom: 25px; background: rgba(255,255,255,0.05); padding: 15px 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-weight: bold; color: #cbd5e1; font-size: 16px;">⏱️ Time Remaining</span>
+                <span id="timerDisplay" style="font-family: monospace; font-size: 24px; font-weight: bold; color: #38bdf8;">10:00</span>
+            </div>
+            <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; overflow: hidden;">
+                <div id="timerProgress" style="width: 100%; height: 100%; background: linear-gradient(90deg, #38bdf8, #8b5cf6); transition: width 1s linear, background-color 0.5s;"></div>
+            </div>
+        </div>
+        <!-- TIME OVER POPUP OVERLAY -->
+        <div id="timeOverOverlay" style="display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.95); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(10px);">
+            <div style="text-align: center; padding: 40px; background: rgba(255,255,255,0.08); border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 0 40px rgba(0,0,0,0.5); max-width: 500px; width: 90%;">
+                <h1 style="color: #ef4444; font-size: 36px; margin-bottom: 15px;">⏱️ Time is Over</h1>
+                <p style="color: #cbd5e1; font-size: 18px; margin-bottom: 30px;">Your time is over. Aptitude test has been auto-submitted.</p>
+                <a href="/dashboard">
+                    <button class="previous-btn" style="background: linear-gradient(90deg, #38bdf8, #8b5cf6); color: white; padding: 15px 30px; font-size: 16px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer;">🏠 Return to Dashboard</button>
+                </a>
+            </div>
+        </div>
+        {% endif %}
 {% if completed %}
 
 <div class="completed">
 
+    {% if time_over %}
+    <h1 style="color: #ef4444; margin-bottom: 20px;">⏱️ Time's Up!</h1>
+    <p>
+        Your time is over. Aptitude test has been auto-submitted.
+    </p>
+    {% else %}
     <h1>🎉 Interview Completed</h1>
-
     <p>
         You completed all aptitude questions successfully.
     </p>
+    {% endif %}
 
     <div class="button-section"
          style="justify-content:center; margin-top:30px;">
@@ -547,6 +575,60 @@
             recognition.start();
         }
 
+        // TIMER SYSTEM COUNTDOWN - 10 Minutes for Aptitude
+        let remainingSeconds = parseInt("{{ remaining_seconds|default:600 }}");
+        const totalDuration = 600;
+        let autoSubmitted = false;
+
+        function startTimer() {
+            const timerDisplay = document.getElementById("timerDisplay");
+            const timerProgress = document.getElementById("timerProgress");
+            const overlay = document.getElementById("timeOverOverlay");
+
+            if (!timerDisplay || !timerProgress || !overlay) return;
+
+            function updateDisplay() {
+                if (remainingSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = "00:00";
+                    timerProgress.style.width = "0%";
+                    overlay.style.display = "flex";
+                    // Auto-submit the form if it exists
+                    if (!autoSubmitted) {
+                        autoSubmitted = true;
+                        const form = document.querySelector('form');
+                        if (form) {
+                            setTimeout(function() { form.submit(); }, 1500);
+                        }
+                    }
+                    return;
+                }
+
+                const minutes = Math.floor(remainingSeconds / 60);
+                const seconds = remainingSeconds % 60;
+                timerDisplay.textContent =
+                    (minutes < 10 ? "0" : "") + minutes + ":" +
+                    (seconds < 10 ? "0" : "") + seconds;
+
+                const percentage = (remainingSeconds / totalDuration) * 100;
+                timerProgress.style.width = percentage + "%";
+
+                if (percentage < 20) {
+                    timerProgress.style.background = "#ef4444";
+                    timerDisplay.style.color = "#ef4444";
+                } else if (percentage < 50) {
+                    timerProgress.style.background = "#f59e0b";
+                    timerDisplay.style.color = "#f59e0b";
+                }
+
+                remainingSeconds--;
+            }
+
+            updateDisplay();
+            const timerInterval = setInterval(updateDisplay, 1000);
+        }
+
+        window.addEventListener('DOMContentLoaded', startTimer);
     </script>
 
 </body>
